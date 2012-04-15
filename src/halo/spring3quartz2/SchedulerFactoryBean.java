@@ -3,6 +3,7 @@ package halo.spring3quartz2;
 import java.util.List;
 
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.InitializingBean;
  * @author akwei
  */
 public class SchedulerFactoryBean implements InitializingBean {
+
+    private Scheduler sched = null;
 
     private List<MethodInvokerTriggerBean> triggers;
 
@@ -27,9 +30,20 @@ public class SchedulerFactoryBean implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         SchedulerFactory sf = new StdSchedulerFactory();
-        Scheduler sched = sf.getScheduler();
+        sched = sf.getScheduler();
         for (MethodInvokerTriggerBean triggerBean : triggers) {
-            sched.scheduleJob(triggerBean.createTrigger());
+            sched.scheduleJob(triggerBean.getJobDetail(),
+                    triggerBean.createTrigger());
+        }
+        sched.start();
+    }
+
+    public void destory() {
+        try {
+            sched.shutdown();
+        }
+        catch (SchedulerException e) {
+            throw new RuntimeException(e);
         }
     }
 }

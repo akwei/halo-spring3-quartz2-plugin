@@ -23,6 +23,16 @@ public abstract class MethodInvokerTriggerBean extends TriggerBean {
         this.methodHandler = methodHandler;
     }
 
+    @Override
+    public JobDetail getJobDetail() {
+        try {
+            return this.createJobDetail();
+        }
+        catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 创建JobDetail
      * 
@@ -39,9 +49,8 @@ public abstract class MethodInvokerTriggerBean extends TriggerBean {
             clazz = (Class<? extends Job>) (this.getClass().getClassLoader()
                     .loadClass(this.jobClassName));
         }
-        JobDetail jobDetail = newJob(clazz).withIdentity(
-                "job" + Math.random() + System.currentTimeMillis()
-                        + Math.random(), "group1").build();
+        JobDetail jobDetail = newJob(clazz).withIdentity("job" + Math.random(),
+                "group1").build();
         jobDetail.getJobDataMap().put("methodHandler", this.methodHandler);
         return jobDetail;
     }

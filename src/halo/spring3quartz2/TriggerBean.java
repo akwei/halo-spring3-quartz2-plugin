@@ -1,5 +1,6 @@
 package halo.spring3quartz2;
 
+import org.quartz.JobDetail;
 import org.quartz.Trigger;
 
 /**
@@ -26,4 +27,6 @@ public abstract class TriggerBean {
      * @return
      */
     public abstract Trigger createTrigger();
+
+    public abstract JobDetail getJobDetail();
 }

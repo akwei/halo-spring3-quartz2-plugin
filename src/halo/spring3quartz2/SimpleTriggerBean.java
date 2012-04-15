@@ -46,22 +46,10 @@ public class SimpleTriggerBean extends MethodInvokerTriggerBean {
 
     @Override
     public Trigger createTrigger() {
-        try {
-            return newTrigger()
-                    .withIdentity(
-                            "trigger" + Math.random()
-                                    + System.currentTimeMillis()
-                                    + Math.random(), "group1")
-                    .startAt(
-                            new Date(System.currentTimeMillis()
-                                    + this.startDelay))
-                    .withSchedule(
-                            simpleSchedule().withIntervalInMilliseconds(
-                                    this.repeatInterval).repeatForever())
-                    .forJob(this.createJobDetail()).build();
-        }
-        catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return newTrigger()
+                .startAt(new Date(System.currentTimeMillis() + this.startDelay))
+                .withSchedule(
+                        simpleSchedule().withIntervalInMilliseconds(
+                                this.repeatInterval).repeatForever()).build();
     }
 }

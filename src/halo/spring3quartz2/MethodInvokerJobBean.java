@@ -18,7 +18,7 @@ public class MethodInvokerJobBean implements Job {
             throws JobExecutionException {
         try {
             MethodHandler methodHandler = (MethodHandler) context
-                    .get("methodHandler");
+                    .getJobDetail().getJobDataMap().get("methodHandler");
             Method method = ObjectUtil.getMethod(
                     methodHandler.getTargetObject(),
                     methodHandler.getTargetMethod());
