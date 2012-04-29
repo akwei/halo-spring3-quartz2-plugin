@@ -13,6 +13,10 @@ public class Happy {
         System.out.println("happy invoke");
     }
 
+    public void invoke2() {
+        System.out.println("happy invoke2222");
+    }
+
     @Test
     public void test() {
         while (true) {
