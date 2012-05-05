@@ -25,17 +25,10 @@ public class CronTriggerBean extends MethodInvokerTriggerBean {
 
     @Override
     public Trigger createTrigger() {
-        try {
-            return newTrigger()
-                    .withIdentity(
-                            "trigger" + Math.random()
-                                    + System.currentTimeMillis()
-                                    + Math.random(), "group1")
-                    .withSchedule(cronSchedule(cronExpression))
-                    .forJob(this.createJobDetail()).build();
-        }
-        catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return newTrigger()
+                .withIdentity(
+                        "trigger" + Math.random() + System.currentTimeMillis()
+                                + Math.random(), "group1")
+                .withSchedule(cronSchedule(cronExpression)).build();
     }
 }

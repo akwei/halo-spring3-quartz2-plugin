@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee" xmlns:jms="http://www.springframework.org/schema/jms"
-	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:jms="http://www.springframework.org/schema/jms" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
@@ -22,10 +27,22 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="schedulerFactoryBean" class="halo.spring3quartz2.SchedulerFactoryBean" destroy-method="destory">
+	<bean id="cronTriggerBean" class="halo.spring3quartz2.CronTriggerBean">
+		<!-- 每天上午12点触发 -->
+		<property name="cronExpression" value="0 * * * * ?" />
+		<property name="methodHandler">
+			<bean class="halo.spring3quartz2.MethodHandler">
+				<property name="targetObject" ref="happy" />
+				<property name="targetMethod" value="invoke2" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="schedulerFactoryBean" class="halo.spring3quartz2.SchedulerFactoryBean"
+		destroy-method="destory">
 		<property name="triggers">
 			<list>
 				<ref bean="simpleTriggerBean" />
+				<ref bean="cronTriggerBean" />
 			</list>
 		</property>
 	</bean>
